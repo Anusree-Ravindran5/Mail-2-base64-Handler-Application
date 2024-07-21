@@ -1,38 +1,24 @@
-# Mail Bridge Archive
-
-## Table of Contents
-- [Introduction](#introduction)
-- [Features](#features)
-- [Technologies](#technologies)
-- [Prerequisites](#prerequisites)
-- [Setup](#setup)
-- [Configuration](#configuration)
-- [Endpoints](#endpoints)
-- [Usage](#usage)
-- [Contributing](#contributing)
+# Mail 2 Base64 Handler
 
 ## Introduction
 
-- Mail Bridge Archive is a Spring Boot application designed to process emails and extract attachments, then parse and store the extracted data into a database. It supports multiple attachment types, including **CSV, Excel, PDF, and TXT**. Additionally, it provides endpoints for manual data insertion with authentication.
+- Mail 2 Base64 Handler is a Spring Boot application designed to process incoming emails, convert their contents to Base64 encoding, and handle various data processing tasks. The application aims to streamline email handling by converting email content into Base64 format, facilitating easier storage and transmission. It also provides endpoints for managing and processing email data.
 
 ## Features
 
-- Scheduled email checking and processing.
-- Support for parsing **CSV, Excel, PDF, and TXT** attachments.
-- Manual data insertion via **REST API** with authentication.
+- Email Processing: Reads incoming emails and converts their content into Base64 format.
+- Email Processing: Reads incoming emails and converts their content into Base64 format.
+- Error Handling: Provides detailed logging and notification for errors encountered during email processing.
 - Logging of processed data.
-- Moving processed emails to specific folders based on success or failure.
+- Notification System: Sends notifications for errors and exceptions encountered during processing.
 
 ## Technologies
 
 - Java
 - Spring Boot
 - Spring Data JPA
-- Swagger
 - Logback
 - Javax Mail
-- Apache PDFBox
-- Apache Commons CSV
 - H2 Database (for development)
 - MySQL (for production)
 - Maven
@@ -49,8 +35,8 @@
 ****1.Clone the repository:****
 
    ```bash
-   git clone https://github.com/your-username/mail-bridge-archive.git
-   cd mail-bridge-archive
+   https://github.com/Anusree-Ravindran5/Mail-2-base64-Handler-Application.git
+   cd Mail-2-base64-Handler-Application
    ```
 ##### Build the project:
 
@@ -76,9 +62,6 @@ spring.datasource.driverClassName=org.h2.Driver
 spring.datasource.username=sa
 spring.datasource.password=password
 spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
-
-# Authentication key
-app.auth.key=your_auth_key_here
 ```
 # MySQL Configuration
 #### For production, configure MySQL settings:
@@ -86,7 +69,7 @@ app.auth.key=your_auth_key_here
 #### properties
 
 ```java
-spring.datasource.url=jdbc:mysql://localhost:3306/mail_archive_db
+spring.datasource.url=jdbc:mysql://localhost:3306/Your_DB
 spring.datasource.username=root
 spring.datasource.password=yourpassword
 spring.jpa.hibernate.ddl-auto=update
@@ -95,79 +78,37 @@ spring.jpa.database-platform=org.hibernate.dialect.MySQLDialect
 
 ## Endpoints
 ##### Process Mail Endpoint
-* **URL:**`/api/mail/process`
-* **Method:** POST
+* **URL:**`/api/emails/processUnread`
+* **Method:** GET
 
-****Request Body:****
-~~~json
-{
-  "subject": "Mail Archive"
-}
-~~~
 
 ****Response:****
 
-* **200 OK:** Mail processed successfully.
-* **500 Internal Server Error:** Error processing mail.
-##### Manual Insert Endpoint
-* **URL:** `/api/mail/manual-insert`
-* **Method:** `POST`
-* **Headers:** Auth-Key: ` your_auth_key_here`
-##### Request Body:
-
-
-```json   
-    {
-      "name": "John Doe",
-      "email": "john.doe@example.com",
-      "mobile": "1234567890",
-      "location": "New York",
-      "description": "Sample description",
-      "status": "active",
-      "startDate": "2024-07-01 10:00:00",
-      "endDate": "2024-07-01 12:00:00",
-      "assignedTo": "Admin",
-      "comments": "No comments",
-      "lastUpdated": "2024-07-01 10:00:00",
-      "type": "Type A",
-      "hold": "false"
-     } 
-```
-##### Response:
-- **200 OK:** Data inserted successfully.
-- **403 Forbidden:** Invalid authentication key.
-- **500 Internal Server Error:** Error inserting data.
+* **200 OK:** Successfully read and processed unread emails.
+* **500 Internal Server Error:** "Failed to read and process unread emails: [error message].
 
 ## Usage
 
 ##### 1.Scheduled Mail Processing:
 
-- The application will automatically check and process emails at the interval specified in the `@Scheduled` annotation in the MailService class (currently set to every 10 minutes).
+- The application will automatically check and process emails at the interval specified in the @Scheduled annotation in the MailService class (currently set to every 10 Seconds).
 
 ##### 2.Manual Mail Processing:
 
-- Use the `/api/mail/process` endpoint to trigger mail processing manually.
+- Use the /api/emails/processUnread endpoint to trigger mail processing manually. This endpoint reads and processes unread emails from the mailbox.
 
-##### 3.Manual Data Insertion:
-
-- Use the `/api/mail/manual-insert` endpoint to insert data manually with the proper authentication key.
- 
 ### Email Notification Sender
 
 - #### The application will send email notifications for the following cases:
 
-- **Failed Mail Processing:** An email will be sent to the recipient with the subject `"Failed Mail Processing"` and the body containing the error message.
-- **Unauthorized Access:** An email will be sent to the recipient with the subject `"Unauthorized Access Attempt"` and the body containing the authentication key used.
+- **Failed Mail Processing:** Error During Mail Processing: An email will be sent to the recipient with the subject `"Error Notification"` and the body containing the error message and email body.
 - **Exception Occurred:** An email will be sent to the recipient with the subject `"Exception Occurred"` and the body containing the exception message.
-
-### Swagger Integration
-- Swagger UI is integrated to provide API documentation. Access Swagger UI at `http://localhost:8080/swagger-ui/index.html`.
 
 ### Test Cases
 - Unit test cases are implemented to verify the functionality of service methods, repository operations, and controller endpoints.
 
 ### Logging Configuration (Logback)
-- Logback is configured to provide live logging and daily log rotation. Logs are stored in `logs/mail-bridge-archive.log` and rotated daily.
+- Logback is configured to provide live logging and daily log rotation. Logs are stored in `logs/Mail_2_base64_Handler.log` and rotated daily.
 ## Contributing:
 - Fork the repository.
 - **Create a feature branch:** `git checkout -b` feature-name
